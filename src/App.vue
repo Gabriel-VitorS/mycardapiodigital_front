@@ -1,7 +1,5 @@
-<template>
-  <router-view name="SideBar" />
+<template>  
   <router-view> </router-view>
-  
 </template>
 
 <script>
@@ -12,5 +10,7 @@ export default {
 }
 </script>
 <style>
-
+main{
+  height: 100vh;
+}
 </style>
