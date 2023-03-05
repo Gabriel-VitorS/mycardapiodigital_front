@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import GestorHomeView from '@/views/GestorHomeView.vue'
-import GestorProdutosView from '@/views/GestorProdutosView.vue'
+import GestorHomeView from '@/views/Gestor/GestorHomeView.vue'
+import GestorProdutosView from '@/views/Gestor/GestorProdutosView.vue'
 import SideBar from '../components/SideBar.vue'
-import LoginView from '@/views/LoginView.vue'
-import CadastrarView from '@/views/CadastrarView.vue'
+import LoginView from '@/views/Gestor/LoginView.vue'
+import CadastrarView from '@/views/Gestor/CadastrarView.vue'
+import CadastroSucessoView from '@/views/Gestor/CadastroSucessoView.vue'
 const routes = [
   {
     path: '/',
@@ -23,6 +24,14 @@ const routes = [
     path: '/cadastrar',
     name: 'cadastrar',
     component: CadastrarView,
+    meta:{
+      title: 'Cadastrar'
+    }
+  },
+  {
+    path: '/cadastrar-sucesso',
+    name: 'cadastrar-sucesso',
+    component: CadastroSucessoView,
     meta:{
       title: 'Cadastrar'
     }
