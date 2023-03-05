@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import GestorHomeView from '@/views/Gestor/GestorHomeView.vue'
-import GestorProdutosView from '@/views/Gestor/GestorProdutosView.vue'
-import SideBar from '../components/SideBar.vue'
+
+import GestorHomeView from '@/views/Gestor/HomeView.vue'
+import ProdutosView from '@/views/Gestor/ProdutosView.vue'
+import ConfiguracoesView from '@/views/Gestor/ConfiguracoesView.vue'
+import CategoriasView from '@/views/Gestor/CategoriasView.vue'
+import MainContainer from '@/components/gestor/MainContainer.vue'
 import LoginView from '@/views/Gestor/LoginView.vue'
 import CadastrarView from '@/views/Gestor/CadastrarView.vue'
 import CadastroSucessoView from '@/views/Gestor/CadastroSucessoView.vue'
@@ -37,22 +40,27 @@ const routes = [
     }
   },
   {
-    path: '/gestor',
-    name: 'gestor',
-    components: 
-    {
-      default: GestorHomeView,
-      SideBar,
-    },
-  },
-  {
-    path: '/gestor/produtos',
-    name: 'produtos',
-    components: {
-      default: GestorProdutosView,
-      SideBar,
-    },
-  },
+    path: '/gestor', component: MainContainer,
+    name: 'gestor-home',
+    children: [
+      {
+        path: '',
+        component: GestorHomeView
+      },
+      {
+        path: 'configuracoes',
+        component: ConfiguracoesView
+      },
+      {
+        path: 'categorias',
+        component: CategoriasView
+      },
+      {
+        path: 'produtos',
+        component: ProdutosView
+      }
+    ]
+  }
 ]
 
 const router = createRouter({
@@ -60,9 +68,17 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to) => {
   document.title = to.meta.title
-  next();
+
+  if(to.path.includes('/gestor')){
+    
+    if(sessionStorage.getItem('JWT') === null)
+      return {name: 'login'}
+
+  }
+
+  
 });
 
 export default router
