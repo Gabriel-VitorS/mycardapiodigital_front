@@ -4,7 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import GestorHomeView from '@/views/Gestor/HomeView.vue'
 import ProdutosView from '@/views/Gestor/ProdutosView.vue'
 import ConfiguracoesView from '@/views/Gestor/ConfiguracoesView.vue'
-import CategoriasView from '@/views/Gestor/CategoriasView.vue'
+import CategoriasView from '@/views/Gestor/Categorias/CategoriasView.vue'
 import MainContainer from '@/components/gestor/MainContainer.vue'
 import LoginView from '@/views/Gestor/LoginView.vue'
 import CadastrarView from '@/views/Gestor/CadastrarView.vue'
@@ -41,23 +41,39 @@ const routes = [
   },
   {
     path: '/gestor', component: MainContainer,
-    name: 'gestor-home',
+    name: 'gestor',
     children: [
       {
         path: '',
-        component: GestorHomeView
+        component: GestorHomeView,
+        name: 'gestor-home',
+        meta:{
+          title: 'Gestor'
+        }
       },
       {
         path: 'configuracoes',
-        component: ConfiguracoesView
+        component: ConfiguracoesView,
+        name: 'configuracoes',
+        meta:{
+          title: 'Configurações'
+        }
       },
       {
         path: 'categorias',
-        component: CategoriasView
+        component: CategoriasView,
+        name: 'categorias',
+        meta:{
+          title: 'Categorias'
+        }
       },
       {
         path: 'produtos',
-        component: ProdutosView
+        component: ProdutosView,
+        name: 'produtos',
+        meta:{
+          title: 'Produtos'
+        }
       }
     ]
   }
