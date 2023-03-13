@@ -5,6 +5,7 @@ import GestorHomeView from '@/views/Gestor/HomeView.vue'
 import ProdutosView from '@/views/Gestor/ProdutosView.vue'
 import ConfiguracoesView from '@/views/Gestor/ConfiguracoesView.vue'
 import CategoriasView from '@/views/Gestor/Categorias/CategoriasView.vue'
+import CategoriasEditView from '@/views/Gestor/Categorias/CategoriaEditView.vue'
 import MainContainer from '@/components/gestor/MainContainer.vue'
 import LoginView from '@/views/Gestor/LoginView.vue'
 import CadastrarView from '@/views/Gestor/CadastrarView.vue'
@@ -63,6 +64,14 @@ const routes = [
         path: 'categorias',
         component: CategoriasView,
         name: 'categorias',
+        meta:{
+          title: 'Categorias'
+        }
+      },
+      {
+        path: 'categorias/:id',
+        component: CategoriasEditView,
+        name: 'categorias-edit',
         meta:{
           title: 'Categorias'
         }
