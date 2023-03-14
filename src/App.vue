@@ -13,4 +13,14 @@ export default {
 main{
   height: 100vh;
 }
+
+body {
+  position: fixed;
+  width: 100vw;
+  /* prevent overscroll bounce*/
+  
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  /* iOS velocity scrolling */
+}
 </style>
