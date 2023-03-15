@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
 import GestorHomeView from '@/views/Gestor/HomeView.vue'
-import ProdutosView from '@/views/Gestor/ProdutosView.vue'
+import ProdutosView from '@/views/Gestor/Produtos/ProdutosView.vue'
+import ProdutosEditView from '@/views/Gestor/Produtos/ProdutosEditView.vue'
 import ConfiguracoesView from '@/views/Gestor/ConfiguracoesView.vue'
 import CategoriasView from '@/views/Gestor/Categorias/CategoriasView.vue'
 import CategoriasEditView from '@/views/Gestor/Categorias/CategoriaEditView.vue'
@@ -83,7 +84,15 @@ const routes = [
         meta:{
           title: 'Produtos'
         }
-      }
+      },
+      {
+        path: 'produtos/:id',
+        component: ProdutosEditView,
+        name: 'produtos-edit',
+        meta:{
+          title: 'Produtos'
+        }
+      },
     ]
   }
 ]
