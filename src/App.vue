@@ -17,10 +17,8 @@ main{
 body {
   position: fixed;
   width: 100vw;
-  /* prevent overscroll bounce*/
-  
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  /* iOS velocity scrolling */
+  
 }
 </style>
