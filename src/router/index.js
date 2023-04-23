@@ -11,6 +11,8 @@ import MainContainer from '@/components/gestor/MainContainer.vue'
 import LoginView from '@/views/Gestor/LoginView.vue'
 import CadastrarView from '@/views/Gestor/CadastrarView.vue'
 import CadastroSucessoView from '@/views/Gestor/CadastroSucessoView.vue'
+
+import CardapioView from '@/views/Cardapio/CardapioView.vue'
 const routes = [
   {
     path: '/',
@@ -40,6 +42,11 @@ const routes = [
     meta:{
       title: 'Cadastrar'
     }
+  },
+  {
+    path: '/cardapio/:restaurante',
+    name: 'cardapio',
+    component: CardapioView
   },
   {
     path: '/gestor', component: MainContainer,
