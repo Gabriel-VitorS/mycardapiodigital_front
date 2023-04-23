@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+import NotFound from '@/views/NotFound.vue'
+
 import GestorHomeView from '@/views/Gestor/HomeView.vue'
 import ProdutosView from '@/views/Gestor/Produtos/ProdutosView.vue'
 import ProdutosEditView from '@/views/Gestor/Produtos/ProdutosEditView.vue'
@@ -101,7 +103,8 @@ const routes = [
         }
       },
     ]
-  }
+  },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
 
 const router = createRouter({

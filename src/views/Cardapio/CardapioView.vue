@@ -109,6 +109,7 @@ export default{
                 document.title = this.configuration.name_company
                 this.showCardapio = true
             } catch (error) {
+                this.$router.push('/NotFound')
                 console.log(error)
             }
             
