@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+import HomeView from '@/views/HomeView.vue'
 
 import NotFound from '@/views/NotFound.vue'
 
-import GestorHomeView from '@/views/Gestor/HomeView.vue'
+// import GestorHomeView from '@/views/Gestor/HomeView.vue'
 import ProdutosView from '@/views/Gestor/Produtos/ProdutosView.vue'
 import ProdutosEditView from '@/views/Gestor/Produtos/ProdutosEditView.vue'
 import ConfiguracoesView from '@/views/Gestor/Configuracoes/ConfiguracoesView.vue'
@@ -30,7 +30,7 @@ const routes = [
     }
   },
   {
-    path: '/cadastrar',
+    path: '/cadastro',
     name: 'cadastrar',
     component: CadastrarView,
     meta:{
@@ -54,14 +54,14 @@ const routes = [
     path: '/gestor', component: MainContainer,
     name: 'gestor',
     children: [
-      {
-        path: '',
-        component: GestorHomeView,
-        name: 'gestor-home',
-        meta:{
-          title: 'Gestor'
-        }
-      },
+      // {
+      //   path: '',
+      //   component: GestorHomeView,
+      //   name: 'gestor-home',
+      //   meta:{
+      //     title: 'Gestor'
+      //   }
+      // },
       {
         path: 'configuracoes',
         component: ConfiguracoesView,
@@ -108,12 +108,12 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(process.env.BASE_URL),
   routes
 })
 
 router.beforeEach(async (to) => {
-  document.title = to.meta.title
+  // document.title = to.meta.title
 
   if(to.path.includes('/gestor')){
     
