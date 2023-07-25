@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import FormLogin from '@/components/gestor/login/FormLogin.vue';
+import FormLogin from '@/components/gestor/forms/FormLogin.vue';
 export default {
     name: 'LoginView',
     components: {FormLogin}
