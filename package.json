@@ -18,6 +18,7 @@
     "core-js": "^3.8.3",
     "cpf-cnpj-validator": "^1.0.3",
     "maska": "^2.1.9",
+    "moment": "^2.29.4",
     "vue": "^3.2.13",
     "vue-advanced-cropper": "^2.8.8",
     "vue-class-component": "^8.0.0-0",
