@@ -11,28 +11,28 @@
             <ul class="nav nav-pills flex-column mb-auto">
                 <li className="nav-item">
                     <router-link to="/gestor" class="nav-link"
-                    :class="this.$route.path.split('/').length == 2 ? 'active text-light' : 'link-dark' ">
+                    :class="$route.path.split('/').length == 2 ? 'active text-light' : 'link-dark' ">
                         Ínicio
                     </router-link>
                 </li>
 
                 <li className="nav-item">
                     <router-link to="/gestor/configuracoes" class="nav-link"
-                    :class="this.$route.path.includes('configuracoes') ? 'active text-light': 'link-dark' " >
+                    :class="$route.path.includes('configuracoes') ? 'active text-light': 'link-dark' " >
                         Configurações
                     </router-link>
                 </li>
 
                 <li className="nav-item">
                     <router-link to="/gestor/categorias" class="nav-link "
-                    :class="this.$route.path.includes('categorias') ? 'active text-light': 'link-dark' ">
+                    :class="$route.path.includes('categorias') ? 'active text-light': 'link-dark' ">
                         Categorias
                     </router-link>
                 </li>
 
                 <li className="nav-item">
                     <router-link to="/gestor/produtos" class="nav-link"
-                    :class="this.$route.path.includes('produtos') ? 'active text-light': 'link-dark' ">
+                    :class="$route.path.includes('produtos') ? 'active text-light': 'link-dark' ">
                         Produtos
                     </router-link>
                 </li>
@@ -42,9 +42,9 @@
 
             <div className="d-flex justify-content-lg-center justify-content-between">
                 <div class="dropdown">
-                    <a ref="dropDownMain" class="dropdown-toggle text-dark text-decoration-none" @click="new Dropdown(this.$refs.dropDownMain).show()" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a ref="dropDownMain" class="dropdown-toggle text-dark text-decoration-none" @click="showDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span v-if="nameCompany === ''" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <strong v-else>Gabriel Vitor</strong>
+                        <strong v-else>{{ nameCompany }}</strong>
                     </a>
 
                     <ul class="dropdown-menu">
@@ -92,35 +92,36 @@
 
 </template>
 
-<script>
-import axios from 'axios';
+<script lang="ts" setup>
+import {ref, onMounted} from 'vue'
+import router from '@/router';
 import { Dropdown } from 'bootstrap';
-export default {
-    name: 'SideBar',
-    data(){
-        return{
-            Dropdown,
-            showMenu: false,
-            nameCompany: ''
-        }
-    },
-    beforeRouteUpdate(){
-        this.showMenu= false
-    },
-    async mounted(){
-        await axios.get(`${process.env.VUE_APP_URL_API}/company`,{
-            headers: {Authorization: `bearer ${sessionStorage.getItem('JWT')}`}
-        }).then((data)=>{
-            this.nameCompany = data.data.name
-        })
-    },
-    methods:{
-        loggout(){
-            sessionStorage.removeItem('JWT')
-            this.$router.push('/login')
-        }
+import fetchDataAuth from '@/fetch/fetchDataAuth';
+const showMenu = ref<boolean>(false)
+const nameCompany = ref<string>('')
+const dropDownMain = ref<Element| null>(null)
+
+const showDropDown = () =>{
+    if(dropDownMain.value != null){
+        new Dropdown(dropDownMain.value).show()
     }
 }
+
+const loggout = async () => {
+    await fetchDataAuth('GET', '')
+    sessionStorage.removeItem('JWT')
+    router.push('/login')
+}
+
+onMounted(async ()=>{
+    const request = await fetchDataAuth('GET', 'company')
+
+    if(request.code == 200){
+        nameCompany.value = request.data.name
+    }
+
+})
+
 </script>
 
 <style scoped>
