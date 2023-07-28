@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, defineProps} from 'vue'
+import {ref, defineProps, onBeforeMount} from 'vue'
 import {useVuelidate} from '@vuelidate/core'
 import {required} from "@vuelidate/validators";
 
@@ -16,10 +16,18 @@ useVuelidate({
     }
 }, inputValue)
 
-defineProps({
+const props = defineProps({
     label: String,
     id: String,
-    placeholder: String
+    placeholder: String,
+    value: {required: false, type: String}
+})
+
+onBeforeMount(()=>{
+    setTimeout(()=>{
+        if(props.value != undefined)
+            inputValue.value.input = props.value
+    }, 650)
 })
 
 </script>
