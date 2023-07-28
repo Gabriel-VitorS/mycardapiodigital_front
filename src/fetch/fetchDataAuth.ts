@@ -1,6 +1,6 @@
 import router from "@/router";
 import axios from "axios";
-async function fetchDataAuth(method:'POST' | 'GET', url:string, data?: object | FormData ):Promise<Response>{
+async function fetchDataAuth(method:'POST' | 'GET' | 'PUT', url:string, data?: object | FormData ):Promise<Response>{
 
     const jwt = JSON.parse(sessionStorage.getItem('JWT')!)
 
