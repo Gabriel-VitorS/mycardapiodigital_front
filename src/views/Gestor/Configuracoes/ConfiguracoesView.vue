@@ -98,6 +98,7 @@ onMounted(async ()=>{
     showLoader.value = true
     const request = await fetchDataAuth('GET', 'configuration')
     if(request.code != 200){
+        changeToast('Falha ao buscar dados. Atualize a página', 'danger')
         showLoader.value = false
         return
     }
