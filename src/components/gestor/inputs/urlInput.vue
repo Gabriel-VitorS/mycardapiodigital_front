@@ -40,6 +40,7 @@ const verifyUrl = async () =>{
 
     if(request.code != 200){
         messageFeedback.value = 'Error. Tente novamente'
+        isInvalid.value = true
         showSpin.value = false    
         return false
     }
