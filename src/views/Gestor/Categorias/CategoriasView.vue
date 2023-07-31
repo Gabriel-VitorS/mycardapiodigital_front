@@ -2,7 +2,7 @@
     <div class="container">
         <section class="row ">
             <div class="col-lg-2">
-                <select v-model="filter" class="form-select form-select">
+                <select v-model="filter.name" class="form-select form-select">
                     <option value="">Selecione um filtro</option>
                     <option value="name">Nome</option>
                 </select>
@@ -10,9 +10,9 @@
 
             <div class="col-lg-2 mt-2 mt-lg-0">
                 <div class="d-flex">
-                    <input v-model="filterValue" @keyup.enter="getData(1)" type="text" id="filterInput" class="form-control" />
+                    <input v-model="filter.value" @keyup.enter="getData(1)" type="text" id="filterInput" class="form-control" />
                     
-                    <i v-show="hasFilter" @click="filterValue = ''; getData(1)" 
+                    <i v-show="filter.hasFilter" @click="resetFilter" 
                     class="bi bi-x-circle text-danger btn ms-2" title="Limpar filtro"></i>
                 </div>
                 
@@ -35,12 +35,12 @@
                 </thead>
 
                 
-                <tbody v-if="category">
+                <tbody v-if="categorias">
                     
-                    <tr class="cursorPointer" v-for="categories in category.data" :key="categories.id" @click="$router.push(`/gestor/categorias/${categories.id}`)">
-                        <td>{{ categories.id }}</td>
-                        <td>{{ categories.name }}</td>
-                        <td>{{ categories.order }}</td>
+                    <tr class="cursorPointer" v-for="categoria in categorias" :key="categoria.id" @click="$router.push(`/gestor/categorias/${categoria.id}`)">
+                        <td>{{ categoria.id }}</td>
+                        <td>{{ categoria.name }}</td>
+                        <td>{{ categoria.order }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -50,80 +50,99 @@
         </section>
     </div>
 
-    <Pagination v-if="category"
-    :lastPage="category.meta.last_page"
-    :previusPage="category.meta.previous_page_url"
-    :currentPage="category.meta.current_page"
+    <PaginationComponente v-if="categorias"
+    :lastPage="paginacao.last_page"
+    :previusPage="paginacao.previous_page_url"
+    :currentPage="paginacao.current_page"
     :getData="getData"    
     />
 
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div ref="toaster" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                Error ao tentar buscar dados. Tente novamente
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
+    <ToastComponent v-if="toast.show"
+    :message="toast.message"
+    :typeClass="toast.type"/>
 
 </template>
 
-<script>
-import axios from 'axios'
-import Pagination from '@/components/gestor/Paginacao/Pagination.vue'
-import { Toast } from 'bootstrap'
+<script lang="ts" setup>
+// Componentes
+import PaginationComponente from '@/components/gestor/Paginacao/PaginationComponente.vue'
+import ToastComponent from '@/components/toast/ToastComponent.vue';
 
-export default {
-    name: 'ConfiguracoesView',
-    components: {Pagination},
-    data(){
-        return{
-            category: null,
-            currentPage: 1,
-            filter: '',
-            filterValue: '',
-            hasFilter: false,
-            showSpin: false
-        }
-    },
-    mounted(){
-        this.getData(this.currentPage)
-    },
-    methods:{
-        async getData(page){
-            const toaster = new Toast(this.$refs.toaster)
+// Interfaces e tipos
+import InterfaceToast from '@/components/toast/interfaceToast'
+import Categoria from '@/interfaces/Categoria'
+import Paginacao from '@/interfaces/Paginacao';
+import TypeToast from '@/components/toast/typeToast';
 
-            this.showSpin = true
-            this.category = null
+// Funcoes importadas
+import fetchDataAuth from '@/fetch/fetchDataAuth';
+import {ref, onMounted} from 'vue'
 
-            if(this.filterValue == '')
-                this.hasFilter = false
-            else
-                this.hasFilter = true
+// Refs
+const categorias = ref<Array<Categoria>>()
+const showSpin = ref<boolean>(false)
+    
+const toast = ref<InterfaceToast>({
+    show: false,
+    message: '',
+    type: 'danger'
+})
 
-            var params  = new URLSearchParams([['page', page]]);
-            if(this.filter == 'name'){
-                params  = new URLSearchParams([['page', page], ['name', this.filterValue]]);
-            }
+const filter = ref({
+    name: '',
+    value: '',
+    hasFilter: false
+})
 
-            await axios.get(`${process.env.VUE_APP_URL_API}/category`,{
-                params,
-                headers: {Authorization: `bearer ${sessionStorage.getItem('JWT')}`}
-            })
-            .catch((error) => {
-                console.log(error)
-                toaster.show()
-                this.showSpin = false
-            })
-            .then((data)=>{
-                this.category = data.data.data
-                this.currentPage = this.category.meta.current_page
-            })
+const paginacao = ref<Paginacao>({
+    current_page: 1,
+    previous_page_url: '',
+    last_page: 0
+})
 
-            this.showSpin = false
-        },
+// Funcoes
+onMounted( async ()=>{
+    await getData(1)
+})
+const changeToast = (message: string, type: TypeToast)=>{
+    if(toast.value.show == true){
+        toast.value.show = false
     }
+    toast.value.message = message
+    toast.value.type = type
+
+    toast.value.show = true
+    setTimeout(()=>{
+        toast.value.show = false
+    },5000)
+}
+
+const resetFilter = async () =>{
+    filter.value.name = ''
+    filter.value.value = ''
+    filter.value.hasFilter = false
+    await getData(1)
+}
+
+
+const getData = async (page: number) =>{
+    const params = new URLSearchParams([['page', `${page}`]])
+    
+    showSpin.value = true
+
+    if(filter.value.name == 'name' && filter.value.value != ''){
+        filter.value.hasFilter = true
+        params.append('name', filter.value.value)
+    }
+    
+    const request = await fetchDataAuth('GET', 'category', {}, params)
+    if(request.code != 200){
+        showSpin.value = false
+        changeToast('Falha ao buscar dados. Atualize a página', 'danger')
+        return
+    }
+    showSpin.value = false
+    categorias.value = request.data.data
+    paginacao.value = request.data.meta
 }
 </script>
