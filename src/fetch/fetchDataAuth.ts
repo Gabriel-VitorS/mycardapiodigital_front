@@ -1,12 +1,13 @@
 import router from "@/router";
 import axios from "axios";
-async function fetchDataAuth(method:'POST' | 'GET' | 'PUT', url:string, data?: object | FormData ):Promise<Response>{
+async function fetchDataAuth(method:'POST' | 'GET' | 'PUT', url:string, data?: object | FormData, params?: URLSearchParams, ):Promise<Response>{
 
     const jwt = JSON.parse(sessionStorage.getItem('JWT')!)
 
     return await axios({
         method: method,
         headers: {Authorization: `bearer ${jwt.token}`},
+        params: params,
         url: `${process.env.VUE_APP_URL_API}/${url}`,
         data: data
     }).then(function (response){
