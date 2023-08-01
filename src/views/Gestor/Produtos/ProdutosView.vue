@@ -2,7 +2,7 @@
 <div class="container">
         <section class="row ">
             <div class="col-lg-2">
-                <select v-model="filter" class="form-select form-select">
+                <select v-model="filter.name" class="form-select form-select">
                     <option value="">Selecione um filtro</option>
                     <option value="name">Nome</option>
                     <option value="highlight">Destaque</option>
@@ -13,9 +13,9 @@
 
             <div class="col-lg-2 mt-2 mt-lg-0">
                 <div class="d-flex">
-                    <input v-model="filterValue" @keyup.enter="getData(1)" type="text" id="filterInput" class="form-control" />
+                    <input v-model="filter.value" @keyup.enter="getData(1)" type="text" id="filterInput" class="form-control" />
                     
-                    <i v-show="hasFilter" @click="filterValue = ''; filter = '';getData(1)" 
+                    <i v-show="filter.hasFilter" @click="resetFilter" 
                     class="bi bi-x-circle text-danger btn ms-2" title="Limpar filtro"></i>
                 </div>
                 
@@ -41,15 +41,15 @@
                 </thead>
 
                 
-                <tbody v-if="product">
+                <tbody v-if="produtos">
                     
-                    <tr class="cursorPointer" v-for="product in product.data" :key="product.id" @click="$router.push(`/gestor/produtos/${product.id}`)">
-                        <td>{{ product.id }}</td>
-                        <td>{{ product.name }}</td>
-                        <td>{{product.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
-                        <td>{{product.highlight === 'true' ? 'Sim' : 'Não'}}</td>
-                        <td>{{product.visible_online === 'true' ? 'Sim' : 'Não'}}</td>
-                        <td>{{product.category_id}}</td>
+                    <tr class="cursorPointer" v-for="produto in produtos" :key="produto.id" @click="$router.push(`/gestor/produtos/${produto.id}`)">
+                        <td>{{ produto.id }}</td>
+                        <td>{{ produto.name }}</td>
+                        <td>{{produto.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
+                        <td>{{produto.highlight == 1 ? 'Sim' : 'Não'}}</td>
+                        <td>{{produto.visible_online == 1 ? 'Sim' : 'Não'}}</td>
+                        <td>{{produto.category_id}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -59,97 +59,122 @@
         </section>
     </div>
 
-    <Pagination v-if="product"
-    :lastPage="product.meta.last_page"
-    :previusPage="product.meta.previous_page_url"
-    :currentPage="product.meta.current_page"
+    <PaginationComponente v-if="produtos"
+    :lastPage="paginacao.last_page"
+    :previusPage="paginacao.previous_page_url"
+    :currentPage="paginacao.current_page"
     :getData="getData"    
     />
 
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div ref="toaster" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                Error ao tentar buscar dados. Tente novamente
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
+    <ToastComponent v-if="toast.show"
+    :message="toast.message"
+    :typeClass="toast.type"/>
 
 </template>
 
-<script>
-import axios from 'axios'
-import Pagination from '@/components/gestor/Paginacao/Pagination.vue'
-import { Toast } from 'bootstrap'
-export default {
-    name: 'GestorProdutosView',
-    components: {Pagination},
-    data(){
-        return{
-            product: null,
-            currentPage: 1,
-            filter: '',
-            filterValue: '',
-            hasFilter: false,
-            showSpin: false
-        }
-    },
-    mounted(){
-        this.getData(this.currentPage)
-    },
-    methods:{
-        async getData(page){
-            const toaster = new Toast(this.$refs.toaster)
+<script lang="ts" setup>
+import ToastComponent from '@/components/toast/ToastComponent.vue';
+import PaginationComponente from '@/components/gestor/Paginacao/PaginationComponente.vue'
 
-            this.showSpin = true
-            this.product = null
+// Interfaces e tipos
+import InterfaceToast from '@/components/toast/interfaceToast'
+import TypeToast from '@/components/toast/typeToast';
+import Paginacao from '@/interfaces/Paginacao';
+import Produto from '@/interfaces/Produto';
 
-            if(this.filterValue == '')
-                this.hasFilter = false
-            else
-                this.hasFilter = true
+// Funcoes importadas
+import fetchDataAuth from '@/fetch/fetchDataAuth';
+import {ref, onMounted} from 'vue'
 
-            var params  = new URLSearchParams([['page', page]]);
-            if(this.filter == 'name'){
-                params  = new URLSearchParams([['page', page], ['name', this.filterValue]]);
-            }
 
-            if(this.filter == 'highlight'){
-                let inputFilter = 'false'
-                if(this.filterValue.toLocaleLowerCase() === 's' || this.filterValue.toLocaleLowerCase() === 'sim')
-                    inputFilter = 'true'
-                params  = new URLSearchParams([['page', page], ['highlight', inputFilter]]);
-            }
+const produtos = ref<Array<Produto>>()
+const showSpin = ref<boolean>(false)
 
-            if(this.filter == 'visible_online'){
-                let inputFilter = 'false'
-                if(this.filterValue.toLocaleLowerCase() === 's' || this.filterValue.toLocaleLowerCase() === 'sim')
-                    inputFilter = 'true'
-                params  = new URLSearchParams([['page', page], ['visible_online', inputFilter]]);
-            }
+const toast = ref<InterfaceToast>({
+    show: false,
+    message: '',
+    type: 'danger'
+})
 
-            if(this.filter == 'category_id'){
-                params  = new URLSearchParams([['page', page], ['category_id', this.filterValue]]);
-            }
+const filter = ref({
+    name: '',
+    value: '',
+    hasFilter: false
+})
 
-            await axios.get(`${process.env.VUE_APP_URL_API}/product`,{
-                params,
-                headers: {Authorization: `bearer ${sessionStorage.getItem('JWT')}`}
-            })
-            .catch((error) => {
-                console.log(error)
-                toaster.show()
-                this.showSpin = false
-            })
-            .then((data)=>{
-                this.product = data.data.data
-                this.currentPage = this.product.meta.current_page
-            })
+const paginacao = ref<Paginacao>({
+    current_page: 1,
+    previous_page_url: '',
+    last_page: 0
+})
 
-            this.showSpin = false
-        },
+// Funcoes
+onMounted( async ()=>{
+    await getData(1)
+})
+
+const resetFilter = async() =>{
+    filter.value.name = ''
+    filter.value.value = ''
+    filter.value.hasFilter = false
+    await getData(1)
+}
+
+const changeToast = (message: string, type: TypeToast)=>{
+    if(toast.value.show == true){
+        toast.value.show = false
     }
+    toast.value.message = message
+    toast.value.type = type
+
+    toast.value.show = true
+    setTimeout(()=>{
+        toast.value.show = false
+    },5000)
+}
+
+const getData = async (page: number) =>{
+    const params = new URLSearchParams([['page', `${page}`]])
+    
+    showSpin.value = true
+
+    if(filter.value.name != '' && filter.value.value != ''){
+        filter.value.hasFilter = true
+
+        if(filter.value.name == 'highlight' || filter.value.name == 'visible_online'){
+
+            switch (filter.value.value.toLowerCase()) {
+                case 'nao':
+                    params.append(filter.value.name, '0')            
+                    break;
+                case 'não':
+                    params.append(filter.value.name, '0')            
+                    break;
+                case 'n':
+                    params.append(filter.value.name, '0')            
+                    break;
+                case 'sim' || 's':
+                    params.append(filter.value.name, '1')            
+                    break
+                default:
+                    params.append(filter.value.name, '1')            
+                    break;
+            }
+
+        }else{
+            params.append(filter.value.name, filter.value.value)
+        }
+
+    }
+
+    const request = await fetchDataAuth('GET', 'product', {}, params)
+    if(request.code != 200){
+        showSpin.value = false
+        changeToast('Falha ao buscar dados. Atualize a página', 'danger')
+        return
+    }
+    showSpin.value = false
+    produtos.value = request.data.data
+    paginacao.value = request.data.meta
 }
 </script>
