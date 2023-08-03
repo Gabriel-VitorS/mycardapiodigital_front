@@ -17,5 +17,7 @@ body{
   height: 100vh;
   overflow: auto !important;
 }
-
+:root{
+  --main-color: #D9D9D9
+}
 </style>
