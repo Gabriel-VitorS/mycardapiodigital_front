@@ -10,7 +10,7 @@
     </div>
     
     <div>
-        <p>Exemplo: www.cardapiodigital.com.br/cardapio/<strong>{{ url.url == '' ? 'sua-url' : url.url }} </strong></p>
+        <p>Seu link: <a :href="linkLocation() + '#/cardapio/' + url.url" target="_blank">{{linkLocation()}}/cardapio/<strong>{{ url.url == '' ? 'sua-url' : url.url }} </strong></a> </p>
     </div>
 </template>
 
@@ -76,6 +76,10 @@ const validateUrlString = (event: Event)=>{
         event.preventDefault()
         return
     }
+}
+
+const linkLocation = ():string =>{
+    return `${window.location.origin}`
 }
 
 onBeforeMount(()=>{
