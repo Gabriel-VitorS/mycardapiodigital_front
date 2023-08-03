@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 
 import NotFound from '@/views/NotFound.vue'
@@ -113,7 +113,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  // document.title = to.meta.title
+  document.title = to.meta.title as string
 
   if(to.path.includes('/gestor')){
     
