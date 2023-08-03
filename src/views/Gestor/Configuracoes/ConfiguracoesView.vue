@@ -1,203 +1,145 @@
 <template >
-    <section class="container ">
+    <section class="container mt-4">
         <form class="row" ref="form">
-            <div class="col-lg-6 mb-3">
-                <label for="name" class="form-label">Nome do restaurante:</label>
-                <input ref="name" v-model="name_company" required type="text" class="form-control" name="name_company" placeholder="Digite o nome do restaurante">
+
+            <div class="col-lg-6 mt-2">
+                <InputRequired 
+                id="name_company"
+                label="Nome do restaurante:"
+                :value="configuracao.name_company"
+                />
             </div>
 
             <div class="col-lg-6 mb-3">
-                <label for="name" class="form-label">URL:</label>
-                <div class="input-group">
-                    <input ref="name" v-model="url" @blur="verifyUrl" autocomplete="off" @paste="$event => $event.preventDefault()" @keyup.delete="validateUrlString"  @keydown="validateUrlString" required type="text" class="form-control" :class="{'is-invalid': urlIsInvalid}" name="url">
-                    <span v-if="showSpinUrl" class="input-group-text" id="basic-addon1">
-                        <span class="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>
-                    </span>
-                    
-                </div>
-                
-                
-                <div>
-                    <p>Exemplo: www.cardapiodigital.com.br/cardapio/<strong>{{ url == '' ? 'sua-url' : url }} </strong></p>
-                </div>
+                <urlInput
+                :url="configuracao.url" />
             </div>
 
-            <div class="col-md-12 row mt-3">
-                <CropImageBanner :url_image="url_banner" />
+            <div class="col-md12 row mt-3">
+                <CropImageBanner :url_image="configuracao.url_banner " />
             </div>
 
-            <div class="col-md-12 row mt-3">
-                <CropImageLogo :url_image="url_logo" />
+            <div class="col-md12 row mt-3">
+                <CropImageLogo :url_image="configuracao.url_logo" />
             </div>
         </form>
     </section>
 
-    <footer class="d-flex justify-content-around mt-5">
+    <footer class="d-flex justify-content-around mt-5 pb-3">
                     
         <div>
-            <button class="btn btn-success ms-2" @click="enviaConfiguracao" :disabled="buttonDisabled">Salvar</button>
+            <button class="btn btn-success ms-2" @click="submit">Salvar</button>
         </div>
             
     </footer>
 
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div ref="toaster" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                {{ errorMessageToaster }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
+    <ToastComponent v-if="toast.show"
+    :message="toast.message"
+    :typeClass="toast.type"/>
 
-    <ModalAlert v-if="showAlert" message="Configurações salvas com sucesso" @closeButton="this.$router.go(0)" />
+    <ModalAlert v-if="showAlert" message="Configurações salvas com sucesso" @closeButton="$router.go(0)" />
     <ModalLoader v-if="showLoader" />
 
 </template>
 
-<script>
+<script lang="ts" setup>
+// componentes
+import urlInput from '@/components/gestor/inputs/urlInput.vue';
+import InputRequired from '@/components/gestor/inputs/InputRequired.vue';
 import CropImageBanner from '@/components/gestor/CropImage/CropImageBanner.vue'
 import CropImageLogo from '@/components/gestor/CropImage/CropImageLogo.vue'
+import ToastComponent from '@/components/toast/ToastComponent.vue';
 import ModalLoader from '@/components/gestor/ModalLoader/ModalLoader.vue'
 import ModalAlert from '@/components/gestor/ModalAlert/ModalAlert.vue'
-import { Toast } from 'bootstrap'
-import axios from 'axios'
-export default {
-    name: 'ConfiguracoesView',
-    components:{CropImageBanner, CropImageLogo, ModalLoader, ModalAlert},
-    data(){
-        return{
-            name_company: '',
-            url: '',
-            id: 0,
-            oldUrl: '',
-            urlIsInvalid: false,
-            showSpinUrl: false,
-            url_banner: '',
-            url_logo: '',
-            buttonDisabled: true,
-            errorMessageToaster: '',
-            showLoader: false,
-            showAlert: false
-        }
-    },
-    watch:{
-        name_company(){this.changeButtonSubmit()},
-        url(){this.changeButtonSubmit()},
-        urlIsInvalid(){this.changeButtonSubmit()}
-    },
-    mounted(){
-        this.getData()
-    },
-    methods:{
-        validateUrlString(event){
-            if(/^[A-Za-z0-9-]+$/.test(event.key) == false){
-                event.preventDefault()
-                return
-            }
-            
-            if(this.url == ''){
-                this.urlIsInvalid = true
-                return
-            }
-            this.urlIsInvalid = false
-        },
-        async verifyUrl(){
-            const toaster = new Toast(this.$refs.toaster)
-            if(this.url == '' || this.urlIsInvalid)
-                return
 
-            if(this.oldUrl == this.url)
-                return
+import InterfaceToast from '@/components/toast/interfaceToast'
+import TypeToast from '@/components/toast/typeToast';
+import Configuracao from "@/interfaces/Configuracao";
+import {ref, onMounted} from 'vue'
+import fetchDataAuth from '@/fetch/fetchDataAuth';
+import useVuelidate from '@vuelidate/core';
 
-            this.buttonDisabled = true
-            this.showSpinUrl = true
-            await axios.post(`${process.env.VUE_APP_URL_API}/configuration/verify_url`,{url: this.url},{
-                headers: {Authorization: `bearer ${sessionStorage.getItem('JWT')}`}
-            }).then((data)=>{
-                this.showSpinUrl = false
-                if(data.request.status !== 200){
-                    this.errorMessageToaster = 'Error ao verificar url. Tente novamente'
-                    toaster.show()
-                    return
-                }
+const toast = ref<InterfaceToast>({
+    show: false,
+    message: '',
+    type: 'danger'
+})
 
-                if(data.data.isValid == true){
-                    this.urlIsInvalid = false
-                    this.changeButtonSubmit()
-                }else{
-                    this.urlIsInvalid = true
-                }
-            })
-        },
-        async getData(){
-            this.showLoader = true
-            const toaster = new Toast(this.$refs.toaster)
-            await axios.get(`${process.env.VUE_APP_URL_API}/configuration`,{
-                headers: {Authorization: `bearer ${sessionStorage.getItem('JWT')}`}
-            }).then((data)=>{
-                
-                if(data.request.status !== 200){
-                    this.errorMessageToaster = 'Error ao buscar dados. Tente novamente'
-                    toaster.show()
-                    return
-                }
+const showAlert = ref<boolean>(false)
+const showLoader = ref<boolean>(false)
 
-                if(data.data.data == '') return
-
-                this.name_company = data.data.data.name_company
-                this.url = data.data.data.url
-                this.oldUrl = data.data.data.url
-                this.url_banner = `${data.data.data.url_banner}?lastmod=${new Date() / 1}`
-                this.url_logo = `${data.data.data.url_logo}?lastmod=${new Date() / 1}`
-                this.id = data.data.data.id
-                
-            })
-            .catch((err)=>{
-                console.log(err)
-                this.errorMessageToaster = 'Error ao buscar dados. Tente novamente'
-                    toaster.show()
-            })
-            this.showLoader = false
-        },
-        async enviaConfiguracao(){
-            this.showLoader = true
-            const form = new FormData(this.$refs.form)
-            const toaster = new Toast(this.$refs.toaster)
-
-            await axios({
-                method: this.id == 0 ? 'POST' : 'PUT',
-                url: this.id == 0 ? `${process.env.VUE_APP_URL_API}/configuration` : `${process.env.VUE_APP_URL_API}/configuration/${this.id}`,
-                headers: {Authorization: `bearer ${sessionStorage.getItem('JWT')}`},
-                data: form
-            })
-            .catch((err)=>{
-                console.log(err)
-                this.showLoader = false
-                this.errorMessageToaster = 'Erro ao enviar dados. Tente novamente'
-                toaster.show()
-                
-            }).then((data)=>{
-                if(data.request.status == 200){
-                    this.showAlert = true
-                }
-                this.showLoader = false 
-            })
-
-
-        },
-        changeButtonSubmit(){
-            this.buttonDisabled = true
-
-            if(this.name_company == '')
-                return
-
-            if(this.url == '' || this.urlIsInvalid)
-                return
-
-            this.buttonDisabled = false
-        }
+const changeToast = (message: string, type: TypeToast)=>{
+    if(toast.value.show == true){
+        toast.value.show = false
     }
+    toast.value.message = message
+    toast.value.type = type
+
+    toast.value.show = true
+    setTimeout(()=>{
+        toast.value.show = false
+    },5000)
+}
+
+const form = ref<Element | null>(null)
+
+const configuracao = ref<Configuracao>({
+    id: 0,
+    company_id: 0,
+    name_company: '',
+    url: '',
+    url_banner: '',
+    url_logo: '',
+    updated_at: '',
+    created_at: '',
+})
+
+onMounted(async ()=>{
+    showLoader.value = true
+    const request = await fetchDataAuth('GET', 'configuration')
+    if(request.code != 200){
+        changeToast('Falha ao buscar dados. Atualize a página', 'danger')
+        showLoader.value = false
+        return
+    }
+    configuracao.value = request.data
+
+    setTimeout(()=>{
+        showLoader.value = false
+    }, 800)
+
+    
+})
+
+const v$ = useVuelidate()  
+
+const submit = async() =>{
+    if(form.value == null)
+        return
+
+    const formData = new FormData((form.value as HTMLFormElement))
+    if(await v$.value.$validate() == false){
+        changeToast('Preencha o Nome do Restaurante e URL corretamente', 'danger')
+        return
+    }
+
+    const url:string = configuracao.value.id == 0 ? 'configuration' : `configuration/${configuracao.value.id}`
+    const typeFetch: 'POST' | 'PUT' = configuracao.value.id == 0 ? 'POST' : 'PUT'
+
+    showAlert.value = true
+    const request = await fetchDataAuth(typeFetch, url, formData)
+    showAlert.value = false
+    if(request.code == 406){
+        changeToast('URL já está em uso. Utilize outra URL', 'danger')
+        return
+    }
+
+    if(request.code != 200){
+        changeToast('Falha ao salvar configuração. Tente novamente', 'danger')
+        return
+    }
+ 
+    showAlert.value = true
+
 }
 </script>

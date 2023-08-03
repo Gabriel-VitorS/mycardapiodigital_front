@@ -61,7 +61,7 @@
 </template>
 
 
-<script>
+<script lang="js">
 import axios from 'axios';
 import { Toast } from 'bootstrap';
 

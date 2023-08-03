@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import FormCadastro from '@/components/gestor/login/FormCadastro.vue';
+import FormCadastro from '@/components/gestor/forms/FormCadastro.vue';
 export default {
     name: 'CadastrarView',
     components: {

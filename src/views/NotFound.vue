@@ -15,8 +15,6 @@
     </div>
 </template>
 
-<script>
-export default{
-    name: 'NotFound'
-}
+<script lang="ts" setup>
+
 </script>
