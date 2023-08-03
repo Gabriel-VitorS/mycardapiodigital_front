@@ -1,5 +1,5 @@
 <template>
-    <nav>
+    <nav class="pb-1">
         <ul class="pagination justify-content-center">
             <li class="page-item" :class="previusPage ? '' : 'disabled'">
                 <a class="page-link" @click.prevent="changePage" href="#">

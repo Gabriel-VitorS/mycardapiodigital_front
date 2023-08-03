@@ -1,5 +1,5 @@
 <template>
-    <section class="container">
+    <section class="container mt-4">
         <section class="row">
             <span className="fs-3">{{ $route.params.id == '0' ? 'Incluir Categoria': `Editar Categoria - ID ${$route.params.id}`}}</span>
         </section>

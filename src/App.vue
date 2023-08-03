@@ -1,4 +1,4 @@
-<template>  
+<template>
   <router-view> </router-view>
 </template>
 
@@ -10,15 +10,12 @@ export default {
 }
 </script>
 <style>
-main{
+#app, main{
+  height: 100%;
+}
+body{
   height: 100vh;
+  overflow: auto !important;
 }
 
-body {
-  position: fixed;
-  width: 100vw;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  
-}
 </style>

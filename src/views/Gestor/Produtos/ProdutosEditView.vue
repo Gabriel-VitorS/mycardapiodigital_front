@@ -1,5 +1,5 @@
 <template>
-    <section class="container">
+    <section class="container mt-4">
         <section class="row">
             <span class="fs-3">{{ $route.params.id == '0' ? 'Incluir Produto': `Editar Produto - ID ${$route.params.id}`}}</span>
         </section>
@@ -59,7 +59,7 @@
         </section>
     </section>
 
-    <footer class="d-flex justify-content-around mt-5">
+    <footer class="d-flex justify-content-around mt-4 pb-3">
         <button @click="$router.go(-1)" class="btn btn-secondary">Voltar</button>
 
         <button v-if="$route.params.id != '0'" @click="showModalConfirm = true" class="btn btn-danger">Deletar</button>

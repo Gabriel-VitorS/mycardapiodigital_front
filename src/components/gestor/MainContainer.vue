@@ -57,32 +57,16 @@
 
         
         <section class="w-100">
-            <section class="navbar navbar-expand-lg bg-light p-3">
+            <section class="border bg-light d-lg-none d-md-block">
 
-                <div class="container-fluid">
-
-                    <div class="row d-flex w-100 justify-content-around">
-
-                        <div class="col-6">
-                            <i class="bi bi-list fs-3 d-lg-none d-block" @click="showMenu = true"></i>
-                        </div>
-
-                        <div class="col-6 text-end">
-                            <span class="fs-4" >
-                                &nbsp;
-                            </span>
-                        </div>
-                        
-                        
-                    </div>
-
-                </div>
+                <div class="col-1 ps-3">
+                    <i class="bi bi-list fs-1 d-lg-none d-block" @click="showMenu = true"></i>
+                </div>                    
 
             </section>
-
-            <section class="mainContainer">
-                <router-view > </router-view>
-            </section>
+    
+            <router-view > </router-view>
+            
         </section>
         
     </main>
@@ -130,14 +114,6 @@ onMounted(async ()=>{
 </script>
 
 <style scoped>
-.mainContainer{
-    height: 92%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 1em 1em 0 1em;
-    overflow: auto;
-}
 
 nav{
     width: 280px;
@@ -145,16 +121,11 @@ nav{
 @media (max-width: 992px) {
     nav{
         width: 100vw;
-        height: calc(100vh - 60px);
         position: fixed;
-        z-index: 999;
-        top: 0;
-        left: -150vw;
+        z-index: 10;
+        height: 100%;
+        left: -100%;
         transition: left 0.5s;
-    }
-
-    .mainContainer{
-        height: calc(100vh - 150px);
     }
 
     .showNav{

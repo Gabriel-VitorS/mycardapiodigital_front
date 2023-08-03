@@ -1,5 +1,5 @@
 <template >
-    <section class="container ">
+    <section class="container mt-4">
         <form class="row" ref="form">
 
             <div class="col-lg-6 mt-2">
@@ -25,7 +25,7 @@
         </form>
     </section>
 
-    <footer class="d-flex justify-content-around mt-5">
+    <footer class="d-flex justify-content-around mt-5 pb-3">
                     
         <div>
             <button class="btn btn-success ms-2" @click="submit">Salvar</button>

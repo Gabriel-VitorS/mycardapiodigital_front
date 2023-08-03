@@ -1,5 +1,5 @@
 <template >
-    <div class="container">
+    <div class="container mt-4">
         <section class="row ">
             <div class="col-lg-2">
                 <select v-model="filter.name" class="form-select form-select">
@@ -23,7 +23,7 @@
             </div>
         </section>
 
-        <section class="row mt-3">
+        <section class="row mt-3 overflow-auto">
 
             <table class="table table-bordered table-hover">
                 <thead>
