@@ -95,6 +95,7 @@
 <script lang="ts" setup>
 import {ref, onMounted} from 'vue'
 import router from '@/router';
+import { onBeforeRouteUpdate } from 'vue-router';
 import { Dropdown } from 'bootstrap';
 import fetchDataAuth from '@/fetch/fetchDataAuth';
 const showMenu = ref<boolean>(false)
@@ -106,6 +107,10 @@ const showDropDown = () =>{
         new Dropdown(dropDownMain.value).show()
     }
 }
+
+onBeforeRouteUpdate(()=>{
+    showMenu.value = false
+})
 
 const loggout = async () => {
     await fetchDataAuth('GET', '')
