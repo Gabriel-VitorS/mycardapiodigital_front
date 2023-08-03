@@ -13,12 +13,12 @@ const checkboxValue = ref<boolean>()
 const props = defineProps<{
     label: string,
     name: string
-    value: number
+    value: string
 }>()
 
 onMounted(()=>{    
     setTimeout(() => {
-        if(props.value == 1)
+        if(props.value == 'true')
             checkboxValue.value = true
         else
             checkboxValue.value = false

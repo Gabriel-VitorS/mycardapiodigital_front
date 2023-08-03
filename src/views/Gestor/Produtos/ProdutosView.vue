@@ -47,8 +47,8 @@
                         <td>{{ produto.id }}</td>
                         <td>{{ produto.name }}</td>
                         <td>{{produto.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
-                        <td>{{produto.highlight == 1 ? 'Sim' : 'Não'}}</td>
-                        <td>{{produto.visible_online == 1 ? 'Sim' : 'Não'}}</td>
+                        <td>{{produto.highlight == 'true' ? 'Sim' : 'Não'}}</td>
+                        <td>{{produto.visible_online == 'true' ? 'Sim' : 'Não'}}</td>
                         <td>{{produto.category_id}}</td>
                     </tr>
                 </tbody>

@@ -141,8 +141,8 @@ const produto = ref<Produto>({
     details: '',
     image: '',
     url_image: '',
-    highlight: 0,
-    visible_online: 1,
+    highlight: 'false',
+    visible_online: 'false',
     created_at: '',
     updated_at: ''
 })

@@ -8,8 +8,8 @@ export default interface Produto {
     details: null | string,
     image: null | string,
     url_image: string,
-    highlight: number,
-    visible_online: number,
+    highlight: string,
+    visible_online: string,
     created_at: string,
     updated_at: string
 }
