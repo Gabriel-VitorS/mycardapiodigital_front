@@ -6,7 +6,7 @@
     </div>
     <div class="col-lg-6">
         <img v-if="imgCropped" :src="imgCropped" class="mt-2 logoImg" width="100" height="100"  />
-        <img v-if="url_image && imgCropped == null" :src="`http://${this.url_image}`" class="mt-2 logoImg" width="100" height="100"  />
+        <img v-if="url_image && imgCropped == null" :src="`${this.url_image}`" class="mt-2 logoImg" width="100" height="100"  />
     </div>
 
     <input type="file" className="d-none" name="logo_image"  ref="imageFile" />

@@ -6,7 +6,7 @@
     </div>
     <div class="col-lg-6">
         <img v-if="imgCropped" :src="imgCropped" class="rounded mt-2" width="350" height="200"  />
-        <img v-if="url_image && imgCropped == null" :src="`http://${this.url_image}`" class="rounded mt-2" width="350" height="200"  />
+        <img v-if="url_image && imgCropped == null" :src="`${this.url_image}`" class="rounded mt-2" width="350" height="200"  />
     </div>
 
     <input type="file" className="d-none" name="banner_image"  ref="imageFile" />
