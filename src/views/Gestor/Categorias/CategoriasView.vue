@@ -52,7 +52,7 @@
 
     <PaginationComponente v-if="categorias"
     :lastPage="paginacao.last_page"
-    :previusPage="paginacao.previous_page_url"
+    :previusPage="paginacao.prev_page_url"
     :currentPage="paginacao.current_page"
     :getData="getData"    
     />
@@ -96,7 +96,7 @@ const filter = ref({
 
 const paginacao = ref<Paginacao>({
     current_page: 1,
-    previous_page_url: '',
+    prev_page_url: '',
     last_page: 0
 })
 
@@ -143,6 +143,6 @@ const getData = async (page: number) =>{
     }
     showSpin.value = false
     categorias.value = request.data.data
-    paginacao.value = request.data.meta
+    paginacao.value = request.data
 }
 </script>
