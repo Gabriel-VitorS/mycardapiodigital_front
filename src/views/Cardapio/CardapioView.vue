@@ -119,7 +119,7 @@ export default{
 
             try {
                 const {data} = await axios.get(`${process.env.VUE_APP_URL_API}/menu/product/${id}`)
-                this.detailProduct = data.data
+                this.detailProduct = data
                 this.showDetail = true
             } catch (error) {
                 new Toast(this.$refs.toaster).show()
