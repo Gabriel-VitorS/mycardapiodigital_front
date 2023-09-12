@@ -24,7 +24,6 @@
                         :value="produto.highlight"
                         />
                     </div>
-                    
                     <div class="form-check">
                         <CheckboxProduto
                         label="Visível online ?"
@@ -32,6 +31,7 @@
                         :value="produto.visible_online" />
 
                     </div>
+                    
                 </div>
 
                 <div class="col-lg-6 mt-3">
@@ -52,7 +52,7 @@
                 <div class="col-md-6 mt-3">
                     <label for='detail'>Digite os detalhes do produto: <span class="text-black-50">(opcional)</span></label>
                     <div>
-                        <textarea name="details" class="form-control" cols="60" rows="10"></textarea>
+                        <textarea name="details" class="form-control" v-model="produto.details" cols="60" rows="10"></textarea>
                     </div>
                 </div>
             </form>
@@ -96,7 +96,7 @@ import TypeToast from '@/components/toast/typeToast';
 import Produto from '@/interfaces/Produto';
 
 // Funcoes importadas
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import fetchDataAuth from '@/fetch/fetchDataAuth';
 import { useRoute } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
@@ -141,19 +141,21 @@ const produto = ref<Produto>({
     details: '',
     image: '',
     url_image: '',
-    highlight: 'false',
-    visible_online: 'false',
+    highlight: 0,
+    visible_online: 1,
     created_at: '',
     updated_at: ''
 })
 
 
-onMounted(async ()=>{
+onBeforeMount(async ()=>{
+    showLoader.value = true
+
     if(route.params.id == '0'){
+        setTimeout(()=>{ showLoader.value = false },800)
         return
     }
 
-    showLoader.value = true
     const request = await fetchDataAuth('GET', `product/${route.params.id}`)
 
     if(request.code != 200){
@@ -178,15 +180,17 @@ const submit = async() =>{
         return
         
     const formData = new FormData((form.value as HTMLFormElement))
-    const method: 'PUT' | 'POST' = route.params.id == '0' ? 'POST' : 'PUT'
+    route.params.id == '0' ? formData.append('_method', 'post') : formData.append('_method', 'put')
     const url =  route.params.id == '0' ? 'product' : `product/${route.params.id}`
 
-    formData.set('highlight', formData.get('highlight') ? 'true' : 'false')
-    formData.set('visible_online', formData.get('visible_online') ? 'true' : 'false')
-    formData.set('value', String(formData.get('value')).replaceAll(',', '.')) 
+    formData.set('highlight', formData.get('highlight') ? '1' : '0')
+    formData.set('visible_online', formData.get('visible_online') ? '1' : '0')
+    formData.set('value', String(formData.get('value')).replaceAll(',', '.'))  
+    formData.set('value', Number(formData.get('value')).toLocaleString('pt-BR', {currency:'BRL', minimumFractionDigits: 2}) )
+    formData.set('value', String(formData.get('value')).replaceAll(',', '.'))  
 
     showLoader.value = true
-    const request = await fetchDataAuth(method, url, formData)
+    const request = await fetchDataAuth('POST', url, formData)
     showLoader.value = false
 
     if(request.code != 200){
@@ -194,16 +198,26 @@ const submit = async() =>{
         return
     }
 
-    if(method == 'POST')
-        alert.value.message = 'Categoria salva com sucesso'
+    if(route.params.id == '0')
+        alert.value.message = 'Produto salvo com sucesso'
     else
-        alert.value.message = 'Categoria atualizada com sucesso'
+        alert.value.message = 'Produto atualizado com sucesso'
     
     alert.value.show = true
 }
 
-const destroy = () =>{
-    console.log('submit')
+const destroy = async () =>{
+    showLoader.value = true
+    const request = await fetchDataAuth('DELETE', `product/${route.params.id}`)
+    showLoader.value = false
+
+    if(request.code != 200){
+        changeToast('Falha ao deletar produto. Tente novamente', 'danger')
+        return
+    }
+
+    alert.value.message = "Produto deletado com sucesso"
+    alert.value.show = true
 }
 
 </script>

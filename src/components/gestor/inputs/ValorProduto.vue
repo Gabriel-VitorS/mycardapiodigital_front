@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import { vMaska } from 'maska';
-import {defineProps, ref, onMounted} from 'vue'
+import {defineProps, ref, onMounted, watch} from 'vue'
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 
@@ -30,7 +30,7 @@ onMounted(()=>{
     if(props.value != undefined){
         setTimeout(()=>{
             inputValor.value = `${props.value}`.replaceAll('.', ',')
-        }, 100)
+        }, 500)
         
     }
 
