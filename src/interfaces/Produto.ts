@@ -9,8 +9,8 @@ export default interface Produto {
     details: null | string,
     image: null | string,
     url_image: string,
-    highlight: string,
-    visible_online: string,
+    highlight: 1 | 0,
+    visible_online: 1 | 0,
     created_at: string,
     updated_at: string
 }
