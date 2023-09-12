@@ -46,7 +46,7 @@ export default{
             return Number(this.value).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
         },
         imageProduct(){
-            return `http://${this.image}?lastmod=${new Date() / 1})`
+            return `${this.image}?lastmod=${new Date() / 1})`
         }
     },
     mounted(){
