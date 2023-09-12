@@ -133,13 +133,12 @@ const submit = async () =>{
         return
         
     const formData = new FormData((form.value as HTMLFormElement))
-    const method: 'PUT' | 'POST' = route.params.id == '0' ? 'POST' : 'PUT'
+    
+    route.params.id == '0' ? formData.append('_method', 'post') : formData.append('_method', 'put')
     const url =  route.params.id == '0' ? 'category' : `category/${route.params.id}`
-
-    console.log( await v$.value.$validate())
-
+    
     showLoader.value = true
-    const request = await fetchDataAuth(method, url, formData)
+    const request = await fetchDataAuth('POST', url, formData)
     showLoader.value = false
 
     if(request.code == 406){
@@ -152,7 +151,7 @@ const submit = async () =>{
         return
     }
 
-    if(method == 'POST')
+    if(route.params.id == '0')
         alert.value.message = 'Categoria salva com sucesso'
     else
         alert.value.message = 'Categoria atualizada com sucesso'
