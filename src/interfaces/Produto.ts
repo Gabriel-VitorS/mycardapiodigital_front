@@ -2,6 +2,7 @@ export default interface Produto {
     id: number,
     company_id: number,
     category_id: number | null,
+    category_name?: string,
     name: string,
     value: number,
     resume: null | string,
