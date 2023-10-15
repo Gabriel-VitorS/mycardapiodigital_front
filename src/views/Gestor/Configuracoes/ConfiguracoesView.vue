@@ -124,11 +124,11 @@ const submit = async() =>{
     }
 
     const url:string = configuracao.value.id == 0 ? 'configuration' : `configuration/${configuracao.value.id}`
-    const typeFetch: 'POST' | 'PUT' = configuracao.value.id == 0 ? 'POST' : 'PUT'
+    configuracao.value.id == 0 ? formData.append('_method', 'post') : formData.append('_method', 'put')
 
-    showAlert.value = true
-    const request = await fetchDataAuth(typeFetch, url, formData)
-    showAlert.value = false
+    showLoader.value = true
+    const request = await fetchDataAuth('POST', url, formData)
+    showLoader.value = false
     if(request.code == 406){
         changeToast('URL já está em uso. Utilize outra URL', 'danger')
         return

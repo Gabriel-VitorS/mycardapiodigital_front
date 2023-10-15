@@ -7,7 +7,7 @@
                     <option value="name">Nome</option>
                     <option value="highlight">Destaque</option>
                     <option value="visible_online">Visível online</option>
-                    <option value="category_id">Id categoria</option>
+                    <option value="category">Categoria</option>
                 </select>
             </div>
 
@@ -36,7 +36,7 @@
                         <th>Valor</th>
                         <th>Destaque</th>
                         <th>Visível online</th>
-                        <th>Id categoria</th>
+                        <th>Categoria</th>
                     </tr>
                 </thead>
 
@@ -47,9 +47,9 @@
                         <td>{{ produto.id }}</td>
                         <td>{{ produto.name }}</td>
                         <td>{{produto.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
-                        <td>{{produto.highlight == 'true' ? 'Sim' : 'Não'}}</td>
-                        <td>{{produto.visible_online == 'true' ? 'Sim' : 'Não'}}</td>
-                        <td>{{produto.category_id}}</td>
+                        <td>{{produto.highlight == 1 ? 'Sim' : 'Não'}}</td>
+                        <td>{{produto.visible_online == 1 ? 'Sim' : 'Não'}}</td>
+                        <td>{{produto.category_name}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -61,7 +61,7 @@
 
     <PaginationComponente v-if="produtos"
     :lastPage="paginacao.last_page"
-    :previusPage="paginacao.previous_page_url"
+    :previusPage="paginacao.prev_page_url"
     :currentPage="paginacao.current_page"
     :getData="getData"    
     />
@@ -104,7 +104,7 @@ const filter = ref({
 
 const paginacao = ref<Paginacao>({
     current_page: 1,
-    previous_page_url: '',
+    prev_page_url: '',
     last_page: 0
 })
 
@@ -175,6 +175,6 @@ const getData = async (page: number) =>{
     }
     showSpin.value = false
     produtos.value = request.data.data
-    paginacao.value = request.data.meta
+    paginacao.value = request.data
 }
 </script>

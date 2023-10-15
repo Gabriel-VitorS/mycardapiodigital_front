@@ -6,7 +6,7 @@ async function fetchDataAuth(method:'POST' | 'GET' | 'PUT' | 'DELETE', url:strin
 
     return await axios({
         method: method,
-        headers: {Authorization: `bearer ${jwt.token}`},
+        headers: {Authorization: `Bearer ${jwt.token}`},
         params: params,
         url: `${process.env.VUE_APP_URL_API}/${url}`,
         data: data

@@ -55,7 +55,7 @@ onMounted(()=>{
             selectedCategoria.value = ''
         else
             selectedCategoria.value = `${props.categoria}`
-    }, 100);
+    }, 500);
 })
 
 </script>

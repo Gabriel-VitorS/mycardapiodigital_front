@@ -6,24 +6,25 @@
 </template>
 
 <script lang="ts" setup>
-import {defineProps, ref, onMounted} from 'vue'
+import {defineProps, ref, onBeforeMount, watch} from 'vue'
 
 const checkboxValue = ref<boolean>()
 
 const props = defineProps<{
     label: string,
     name: string
-    value: string
+    value: 1 | 0
 }>()
 
-onMounted(()=>{    
+onBeforeMount(()=>{    
+    
     setTimeout(() => {
-        if(props.value == 'true')
+        if(props.value == 1)
             checkboxValue.value = true
         else
             checkboxValue.value = false
         
-    }, 250);
+    }, 500);
 
 })
 

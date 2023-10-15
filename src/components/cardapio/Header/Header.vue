@@ -22,10 +22,10 @@ export default{
     },
     computed:{
         banner(){
-            return{'background-image': `url(http://${this.urlBanner}?lastmod=${new Date() / 1})`,}
+            return{'background-image': `url(${this.urlBanner}?lastmod=${new Date() / 1})`,}
         },
         logo(){
-            return `http://${this.urlLogo}?lastmod=${new Date() / 1})`
+            return `${this.urlLogo}?lastmod=${new Date() / 1})`
         }
     }
 }
