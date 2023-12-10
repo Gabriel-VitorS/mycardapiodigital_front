@@ -1,5 +1,7 @@
 # mycardapiodigital_front
 
+## Projeto foi refeito no Nuxt3: https://github.com/Gabriel-VitorS/mycardapiodigital_nuxt
+
 ## Project setup
 ```
 npm install
