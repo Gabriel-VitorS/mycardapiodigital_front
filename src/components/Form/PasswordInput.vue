@@ -32,7 +32,7 @@ const changeType = () => {
             <i v-else class="bi bi-eye-slash"></i>
         </div>
 
+        <div v-if="errorMessage"  class="invalid-feedback"> {{ errorMessage }} </div>
     </div>
 
-    <div v-if="errorMessage"  class="invalid-feedback"> {{ errorMessage }} </div>
 </template>
