@@ -16,10 +16,12 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@dmalbuquerque/cpf-cnpj-validator": "^1.0.3",
     "@popperjs/core": "^2.11.8",
     "axios": "^1.12.2",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
+    "maska": "^3.2.0",
     "pinia": "^3.0.3",
     "reset-css": "^5.0.2",
     "vee-validate": "^4.15.1",
