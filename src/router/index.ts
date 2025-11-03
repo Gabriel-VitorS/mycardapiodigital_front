@@ -18,6 +18,16 @@ const router = createRouter({
       name: 'register',
       component: () => import('../views/Auth/RegisterView.vue'),
     },
+    {
+      path: '/gestor/inicio',
+      name: 'gestor-inicio',
+      component: () => import('../views/Manager/HomeView.vue'),
+    },
+    {
+      path: '/gestor/configuracao-cardapio',
+      name: 'menu-configuration',
+      component: () => import('../views/Manager/MenuConfiguration/MenuConfigurationView.vue'),
+    },
   ],
 })
 
