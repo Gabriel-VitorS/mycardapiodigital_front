@@ -28,6 +28,18 @@ const router = createRouter({
       name: 'menu-configuration',
       component: () => import('../views/Manager/MenuConfiguration/MenuConfigurationView.vue'),
     },
+    {
+      path: '/gestor/categorias',
+      name: 'categories',
+      component: () => import('../views/Manager/Category/CategoryView.vue'),
+      children: [
+        {
+          path: ':categoryId',
+          name: 'category-modal',
+          component: () => import('../views/Manager/Category/CategoryModal.vue'),
+        }
+      ]
+    },
   ],
 })
 
