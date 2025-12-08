@@ -13,6 +13,7 @@ export type Categories = Pagination & {
 export type CategoryParams = {
     name?: string
     id?: number
+    limit?: number
     page: number
 }
 
