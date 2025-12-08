@@ -40,6 +40,18 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: '/gestor/produtos',
+      name: 'products',
+      component: () => import('../views/Manager/Product/ProductView.vue'),
+      children: [
+        {
+          path: ':productId',
+          name: 'product-modal',
+          component: () => import('../views/Manager/Product/ProductModal.vue'),
+        }
+      ]
+    },
   ],
 })
 
