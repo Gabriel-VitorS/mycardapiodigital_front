@@ -21,7 +21,7 @@ const menuGroup = [
     {
         icon: HouseIcon,
         name: 'Início',
-        path: '/gestor'
+        path: '/gestor/inicio'
     },
     {
         icon: GearIcon,
@@ -69,7 +69,7 @@ const menuGroup = [
      :class="{'show-sidebar': menuSideBarStore.hideOrShowMenu, 'bg-dark': isDarkMode}">
         <div class="d-flex justify-content-between">
 
-            <router-link to="/gestor">
+            <router-link to="/gestor/inicio">
                 <img v-if="isDarkMode" src="/images/mycardapiodigital_light.svg" alt="logo" width="150">
                 <img v-else src="/images/mycardapiodigital_dark.svg" alt="logo" width="150">
                 

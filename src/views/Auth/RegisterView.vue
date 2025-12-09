@@ -64,7 +64,7 @@ const onSubmit = handleSubmit(async (values) => {
     sessionStorage.setItem("JWT", JSON.stringify(token))
     
 
-    router.push("/gestor")
+    router.push("/gestor/inicio")
     
   })
   .catch((err)=>{
