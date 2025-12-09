@@ -1,4 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LoginView from '../views/Auth/LoginView.vue'
+import RegisterView from '../views/Auth/RegisterView.vue'
+import HomeView from '../views/Manager/HomeView.vue'
+import MenuConfigurationView from '../views/Manager/MenuConfiguration/MenuConfigurationView.vue'
+import CategoryView from '../views/Manager/Category/CategoryView.vue'
+import CategoryModal from '../views/Manager/Category/CategoryModal.vue'
+import ProductView from '../views/Manager/Product/ProductView.vue'
+import ProductModal from '../views/Manager/Product/ProductModal.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,44 +19,44 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/Auth/LoginView.vue'),
+      component: LoginView,
     },
         {
       path: '/cadastro',
       name: 'register',
-      component: () => import('../views/Auth/RegisterView.vue'),
+      component: RegisterView,
     },
     {
       path: '/gestor/inicio',
       name: 'gestor-inicio',
-      component: () => import('../views/Manager/HomeView.vue'),
+      component: HomeView,
     },
     {
       path: '/gestor/configuracao-cardapio',
       name: 'menu-configuration',
-      component: () => import('../views/Manager/MenuConfiguration/MenuConfigurationView.vue'),
+      component: MenuConfigurationView,
     },
     {
       path: '/gestor/categorias',
       name: 'categories',
-      component: () => import('../views/Manager/Category/CategoryView.vue'),
+      component: CategoryView,
       children: [
         {
           path: ':categoryId',
           name: 'category-modal',
-          component: () => import('../views/Manager/Category/CategoryModal.vue'),
+          component: CategoryModal,
         }
       ]
     },
     {
       path: '/gestor/produtos',
       name: 'products',
-      component: () => import('../views/Manager/Product/ProductView.vue'),
+      component: ProductView,
       children: [
         {
           path: ':productId',
           name: 'product-modal',
-          component: () => import('../views/Manager/Product/ProductModal.vue'),
+          component: ProductModal,
         }
       ]
     },
