@@ -7,6 +7,8 @@ import CategoryView from '../views/Manager/Category/CategoryView.vue'
 import CategoryModal from '../views/Manager/Category/CategoryModal.vue'
 import ProductView from '../views/Manager/Product/ProductView.vue'
 import ProductModal from '../views/Manager/Product/ProductModal.vue'
+import MenuView from '../views/Menu/MenuView.vue'
+import ProductModalMenu from '@/views/Menu/ProductModalMenu.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +17,18 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('../App.vue'),
+    },
+    {
+      path: '/cardapio/:menu',
+      name: 'menu',
+      component: MenuView,
+      children: [
+        {
+          path: 'produto/:productId',
+          name: 'product-detail-menu',
+          component: ProductModalMenu,
+        }
+      ]
     },
     {
       path: '/login',
