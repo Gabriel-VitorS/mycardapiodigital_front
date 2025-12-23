@@ -5,6 +5,7 @@ import MenuCategory from '@/components/menu/MenuCategory.vue';
 import CardProduct from '@/components/menu/CardProduct.vue';
 
 import { useMenuStore } from '@/stores/menuStore';
+import CategoriesFooter from '@/components/menu/CategoriesFooter.vue';
 
 const menu = router.currentRoute.value.params.menu as string;
 const menuStore = useMenuStore();
@@ -80,6 +81,7 @@ onMounted( async () => {
                     />
                 </div>
             </section>
+            <CategoriesFooter />
         </div>
 
     </div>
