@@ -15,8 +15,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('../App.vue'),
+      redirect: '/login'
     },
     {
       path: '/cardapio/:menu',
