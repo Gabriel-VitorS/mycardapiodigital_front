@@ -1,11 +1,22 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ThemeProvider from './components/layout/ThemeProvider.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+import AdminLayout from './components/layout/AdminLayout.vue';
+
+const route = useRoute()
+
+const isAdm = computed(()=> route.path.includes("gestor"))
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <ThemeProvider v-if="isAdm">
+    <AdminLayout>
+      <router-view />
+    </AdminLayout>
+  </ThemeProvider>
+
+  <router-view v-else />
 </template>
 
 <style scoped></style>
