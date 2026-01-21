@@ -16,6 +16,8 @@ import { useCategoryStore } from '@/stores/categoryStore';
 import { useProductStore } from '@/stores/productStore';
 import SelectImgProduct from '@/components/Form/SelectImgProduct.vue';
 import DefaultTextArea from '@/components/Form/DefaultTextArea.vue';
+import { useCurrency } from '@/composables/useCurrency';
+const {formatUSD} = useCurrency()
 
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
@@ -90,7 +92,7 @@ const onSubmit = handleSubmit(async values => {
         await storeProduct({
             name: values.name,
             category_id: Number(values.category_id) || null,
-            value: String(values.value).replace(',', '.'),
+            value: formatUSD(values.value),
             highlight: values.highlight ? 1 : 0,
             visible_online: values.visible_online ? 1 : 0,
             details: values.details || '',
@@ -109,7 +111,7 @@ const onSubmit = handleSubmit(async values => {
         await updateProduct(productId!, {
             name: values.name,
             category_id: Number(values.category_id) || null,
-            value: String(values.value).replace(',', '.'),
+            value: formatUSD(values.value),
             highlight: values.highlight ? 1 : 0,
             visible_online: values.visible_online ? 1 : 0,
             details: values.details || '',

@@ -6,6 +6,8 @@ import { getMenuProductById } from '@/api/Menu/menu';
 import { useMenuStore } from '@/stores/menuStore';
 import type { MenuProduct } from '@/types/menu/menu.type';
 const menuStore = useMenuStore();
+import { useCurrency } from '@/composables/useCurrency';
+const {formatBRL} = useCurrency()
 
 const productId = router.currentRoute.value.params.productId as number | undefined
 let modal: Modal
@@ -60,7 +62,7 @@ onUnmounted(()=>{
                             </div>
 
                             <div class="col-12 mt-3">
-                                <span>{{ Number(productData.value).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}) }}</span>
+                                <span>{{ formatBRL(productData.value)}}</span>
                             </div>
 
                             <div class="col-12 mt-3">
