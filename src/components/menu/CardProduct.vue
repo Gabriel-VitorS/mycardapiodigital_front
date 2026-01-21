@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useCurrency } from '@/composables/useCurrency';
+const {formatBRL} = useCurrency()
+
 
 defineProps<{
     productId: number;
@@ -21,7 +24,7 @@ defineProps<{
 
             <div style="max-height: 24px;" class="text-truncate">
                 <span style="font-size: 0.8rem;" :style="{color: color}" class="fw-medium">
-                    {{ Number(productPrice).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}) }}
+                    {{ formatBRL(productPrice) }}
                 </span>
             </div>
 

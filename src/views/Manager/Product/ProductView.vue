@@ -14,6 +14,8 @@ import { ref, onMounted} from 'vue';
 import { useProductStore } from '@/stores/productStore';
 import { useForm } from 'vee-validate';
 import * as yup from 'yup';
+import { useCurrency } from '@/composables/useCurrency';
+const {formatBRL} = useCurrency()
 
 
 const productStore = useProductStore();
@@ -128,7 +130,7 @@ const getData = async (page: number = 1) =>{
                     
                     <tr class="cursor-pointer" v-for="product in productStore.products.data" :key="product.id" @click="$router.push({name: 'product-modal', params: {productId: product.id}})">
                         <td scope="row" role="button">{{ product.name }}</td>
-                        <td role="button">{{ Number(product.value).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})  }}</td>
+                        <td role="button">{{ formatBRL(product.value) }}</td>
                         <td role="button">{{ product.highlight == 1 ? "Sim": "Não" }}</td>
                         <td role="button">{{ product.visible_online == 1 ? "Sim": "Não" }}</td>
                         <td role="button">{{ product.category?.name }}</td>
