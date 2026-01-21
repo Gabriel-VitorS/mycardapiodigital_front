@@ -6,6 +6,8 @@ import type { CompanyResponse } from '@/types/manager/company.type';
 import {useTheme} from "@/components/layout/ThemeProvider.vue"
 import { useMenuSideBar } from '@/stores/menuSideBarStore';
 const menuSideBarStore = useMenuSideBar()
+import { useMenuConfigStore } from '@/stores/menuConfigstore';
+const menuConfigStore = useMenuConfigStore()
 
 const {toggleTheme, isDarkMode} = useTheme()
 const company = ref<CompanyResponse>()
@@ -21,6 +23,8 @@ onMounted( async () => {
 
         Toast().error('Erro ao buscar dados do usuário.');
     })
+
+    await menuConfigStore.loadMenuConfig()
 })
 </script>
 

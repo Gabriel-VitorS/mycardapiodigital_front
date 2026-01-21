@@ -16,6 +16,9 @@ import { Toast } from "@/stores/toast";
 import type { ConfigurationForm } from "@/types/manager/configuration"
 import SpinnerSm from '@/components/ui/SpinnerSm.vue';
 import BtnWithSpinner from '@/components/common/BtnWithSpinner.vue';
+import { useMenuConfigStore } from '@/stores/menuConfigstore';
+import BoxArrowUpRight from '@/components/icons/BoxArrowUpRight.vue';
+const menuConfigStore = useMenuConfigStore();
 
 const isLoading= ref(true)
 const isSending= ref(false)
@@ -54,6 +57,7 @@ const onSubmit = handleSubmit(async values => {
         .catch((err) => {
             console.error("Error updating configuration", err);
             Toast().error('Erro ao atualizar configuração. Tente novamente mais tarde.');
+            return
         });
         
 
@@ -66,6 +70,7 @@ const onSubmit = handleSubmit(async values => {
         .catch((err) => {
             console.error("Error creating configuration", err);
             Toast().error('Erro ao criar configuração. Tente novamente mais tarde.');
+            return
         });
     }
 
@@ -74,9 +79,11 @@ const onSubmit = handleSubmit(async values => {
         Toast().success('Imagem do logo atualizada com sucesso!');
         })
         .catch((err) => {
-        console.error("Error updating logo image", err);
-        Toast().error('Erro ao enviar imagem do logo.');
+            console.error("Error updating logo image", err)
+            Toast().error('Erro ao enviar imagem do logo.')
+            return
     });
+    menuConfigStore.loadMenuConfig()
     isSending.value = false
 });
 
@@ -171,6 +178,7 @@ onMounted( async () => {
 
             <div class="col-12 text-center mx-auto">
                 <BtnWithSpinner :is-sending="isSending" type="btn-primary" class="w-100"/>
+                <a :href="menuConfigStore.linkToMenu" target="_blank" v-if="menuConfigStore.isMenuConfigured" class="btn btn-secondary ms-md-1 mt-md-0 mt-2 w-100">Acessar cardápio <BoxArrowUpRight></BoxArrowUpRight> </a>
             </div>
         </form>
     </ComponentCard>

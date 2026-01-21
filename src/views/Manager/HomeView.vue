@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+import BoxArrowUpRight from '@/components/icons/BoxArrowUpRight.vue';
 import BoxIcon from '@/components/icons/BoxIcon.vue';
 import GearIcon from '@/components/icons/GearIcon.vue';
 import TagsIcon from '@/components/icons/TagsIcon.vue';
+import { useMenuConfigStore } from '@/stores/menuConfigstore';
+const menuConfigStore = useMenuConfigStore();
 
 </script>
 
@@ -29,6 +32,13 @@ import TagsIcon from '@/components/icons/TagsIcon.vue';
                     <p>Produtos</p>
                 </div>
             </RouterLink>
+
+            <a v-if="menuConfigStore.isMenuConfigured" :href="menuConfigStore.linkToMenu" target="_blank" class="card col-12 col-md-12 me-2" style="width: 18rem;">
+                <div class="card-body text-center">
+                    <BoxArrowUpRight  style="font-size: 2rem;"/>
+                    <p>Acessar cardápio</p>
+                </div>
+            </a>
         </div>
     </div>
 </template>
