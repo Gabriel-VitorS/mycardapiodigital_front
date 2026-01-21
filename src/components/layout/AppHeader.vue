@@ -37,11 +37,11 @@ onMounted( async () => {
                 
                 <div class="col">
                     <router-link to="/gestor/inicio">
-                        <div class="d-md-none d-block">
+                        <!-- <div class="d-md-none d-block">
                             <img v-if="isDarkMode" src="/images/mycardapiodigital_light.svg" alt="logo">
                             <img v-else src="/images/mycardapiodigital_dark.svg" alt="logo" >
                             
-                        </div>
+                        </div> -->
                         
                     </router-link>
                 </div>
